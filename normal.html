@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Linkedin Authentication Login in Asp.net Website</title>
+<script type="text/javascript" src="http://platform.linkedin.com/in.js">
+api_key:75n50zi24nwadp
+authorize: true
+onLoad: onLinkedInLoad
+scope: r_basicprofile r_emailaddress r_fullprofile
+</script>
+<script type="text/javascript">
+function onLinkedInLoad() {
+IN.Event.on(IN, "auth", onLinkedInAuth);
+}
+function onLinkedInAuth() {
+IN.API.Profile("me")
+.fields("firstName", "lastName", "industry", "location:(name)", "picture-url", "headline", "summary", "num-connections", "public-profile-url", "distance", "positions", "email-address", "educations", "date-of-birth")
+.result(displayProfiles)
+.error(displayProfilesErrors);
+}
+
+function displayProfiles(profiles) {
+member = profiles.values[0];
+alert(JSON.stringify(member));
+
+document.getElementById("lblName").innerHTML = member.firstName + " " + member.lastName + "<br/> Location is " + member.location.name ;
+document.getElementById("imgProfile").src = member.pictureUrl;
+document.getElementById("lblEmail").innerHTML = member.emailAddress;
+document.getElementById("lblProfile").innerHTML = member.publicProfileUrl;
+}
+function displayProfilesErrors(error) {
+profilesDiv = document.getElementById("profiles");
+profilesDiv.innerHTML = error.message;
+console.log(error);
+}
+</script>
+
+</head>
+<body>
+<script type="in/Login" >
+</script>
+<br />
+<b>Get Linkedin LoggedIn User Details</b>
+<table>
+<tr>
+<td>Name:</td>
+<td><label id="lblName" /></td>
+</tr>
+<tr>
+<td>Email:</td>
+<td><label id="lblEmail" /></td>
+</tr>
+<tr>
+<td>Profile Url:</td>
+<td><label id="lblProfile" /></td>
+</tr><tr>
+<td>Profile Image:</td>
+<td> <img id="imgProfile" /></td>
+</tr>
+</table>
+<div id="profiles">
+</div>
+</body>
+</html>
